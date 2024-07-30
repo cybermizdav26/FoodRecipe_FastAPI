@@ -1,11 +1,13 @@
 import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, CHAR, Date, Text
+
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, CHAR, Date, Text, LargeBinary
+
 from sql_app.database import Base, engine
 
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     username = Column(String(25), unique=True, nullable=True)
     email = Column(String, unique=True, nullable=False)
     fullname = Column(String, nullable=True)
@@ -13,6 +15,9 @@ class User(Base):
     birthday = Column(Date, nullable=True)
     phone = Column(CHAR(13), nullable=True)
     about_me = Column(Text, nullable=True)
+
+    def __repr__(self):
+        return self.username
 
 
 class Follow(Base):

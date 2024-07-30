@@ -30,6 +30,14 @@ class UserUpdate(BaseModel):
     about_me: str | None = Field(default=None, examples=["information about yourself"])
 
 
+class UserProfile(BaseModel):
+    username: str
+    fullname: str
+    birthday: date
+    phone: str
+    about_me: str
+
+
 class FollowCreate(BaseModel):
     follower: int
     following: int

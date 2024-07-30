@@ -1,14 +1,13 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
+from app.services import get_user
 from app.utils import get_hashed_password
 from sql_app.database import get_db
 from sql_app.models.user import User, Follow
 from sql_app.schemas.users import UserOutput, UserCreate, UserUpdate, FollowCreate, FollowerList, \
-    FollowOutPut, FollowingList
+    FollowOutPut, FollowingList, UserProfile
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -36,6 +35,14 @@ def user_update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     db.add(db_user)
     db.commit()
     return db_user
+
+
+@router.get("/profile/{user_id}", response_model=UserProfile, status_code=status.HTTP_200_OK)
+def user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = get_user(user_id, db)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found!")
+    return user
 
 
 @router.post("/follow", response_model=FollowOutPut, status_code=status.HTTP_201_CREATED)
@@ -70,7 +77,7 @@ def create_follow(follow: FollowCreate, db: Session = Depends(get_db)):
     return existing_follow or new_follow
 
 
-@router.get("/follower_list/{user_id}", response_model=List[FollowerList])
+@router.get("/follower_list/{user_id}", response_model=list[FollowerList])
 def followers_list(user_id: int, db: Session = Depends(get_db)):
     followers = db.query(Follow).filter(Follow.following == user_id).all()
     if not followers:
@@ -78,7 +85,7 @@ def followers_list(user_id: int, db: Session = Depends(get_db)):
     return followers
 
 
-@router.get("/following_list/{user_id}", response_model=List[FollowingList])
+@router.get("/following_list/{user_id}", response_model=list[FollowingList])
 def followings_list(user_id: int, db: Session = Depends(get_db)):
     followings = db.query(Follow).filter(Follow.follower == user_id).all()
     if not followings:
