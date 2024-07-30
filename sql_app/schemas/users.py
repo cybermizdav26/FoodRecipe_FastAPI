@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -19,7 +19,6 @@ class UserCreate(BaseModel):
 
 
 class UserOutput(BaseModel):
-    id: int
     email: EmailStr
 
 
@@ -31,5 +30,31 @@ class UserUpdate(BaseModel):
     about_me: str | None = Field(default=None, examples=["information about yourself"])
 
 
-class FollowingCreate(BaseModel):
+class FollowCreate(BaseModel):
+    follower: int
     following: int
+    is_following: bool
+
+
+class FollowOutPut(BaseModel):
+    id: int
+    follower: int
+    following: int
+    is_following: bool
+    created_at: datetime
+
+
+class FollowerList(BaseModel):
+    id: int
+    follower: int
+    is_following: bool
+    created_at: datetime
+
+
+class FollowingList(BaseModel):
+    id: int
+    following: int
+    is_following: bool
+    created_at: datetime
+
+
