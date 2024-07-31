@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, DateTime, Boolean, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Table
 from sqlalchemy.orm import relationship
 
 from sql_app.database import Base, engine

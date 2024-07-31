@@ -58,3 +58,9 @@ def recipe_create(recipe: RecipeCreate, db: Session = Depends(get_db)):
     db.refresh(new_recipe)
 
     return new_recipe
+
+
+@router.get("/list", response_model=list[RecipeCreate], status_code=status.HTTP_200_OK)
+def recipe_list(db: Session = Depends(get_db)):
+    recipes = db.query(Recipe).all()
+    return recipes
