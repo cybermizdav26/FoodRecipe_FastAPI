@@ -28,7 +28,6 @@ class Ingredients(Base):
     __tablename__ = "ingredients"
     id = Column(Integer, primary_key=True, index=True)
     ingredient_name = Column(String, nullable=False)
-    ingredient_image = Column(String, nullable=True)  # Use a string for image URL or path
     recipes = relationship("Recipe", secondary="recipe_ingredients_association", back_populates="ingredients")
 
     def __repr__(self):
@@ -50,7 +49,6 @@ class Recipe(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
     title = Column(String(100), nullable=False)
     tags_id = Column(Integer, )
-    image = Column(String, nullable=False)
     time_minutes = Column(Integer, nullable=False)
     ingredients = relationship("Ingredients", secondary=recipe_ingredients_association, back_populates="recipes")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
